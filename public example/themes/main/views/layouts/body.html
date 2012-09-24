@@ -6,4 +6,23 @@ body
 {{ real_name.first }}
 {{ real_name.last }}
 
+<p>// comment</p>
+{{# This will not be parsed or shown in the resulting HTML #}}
+
+{{ noparse }}
+    Hello no parse, {{ name }}!
+{{ /noparse }}
+
+<h1>{{ title }} {{ loops.title }} </h1>
+{{ loops.projects }}
+    <h3>{{ name }}</h3>
+    <h4>Assignees</h4>
+    <ul>
+    {{ assignees }}
+        <li>{{ name }}</li>
+    {{ /assignees }}
+    </ul>
+{{ /loops.projects }}
+
+
 <p>footer data ? {{ hello }}<p>

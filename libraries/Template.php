@@ -187,26 +187,26 @@ class Template
     {
         $__data = $this->data();
 
-        $this->parser = new Lex\Parser();
-
         $layout  = $this->path('layouts.layout');
+
+        $this->parser = new Parser();
 
         // add the partials to the data array
         if($this->partials)
         {
             foreach($this->partials as $key => $value)
             {   
-                $partial = $this->parser->parse(file_get_contents($value->path), $value->data + $__data);
+                $partial = $this->parser->parse($value->path, $value->data + $__data);
                 $__data['partials'][$key] = $partial;
             }
         }
 
         // set the body in the system
-        $body = $this->parser->parse($this->load(), $__data);
+        $body = $this->parser->parse_str($this->load(), $__data);
         $__data['body'] = $body;
 
         // render the main layout
-        return $this->parser->parse(file_get_contents($layout), $__data);
+        return $this->parser->parse($layout, $__data);
     }
 
 
