@@ -4,6 +4,12 @@ Laravel-Template---Parser
 Laravel Template System and Lex Parser bundle
 Based on the template class by Philip Sturgeon
 
+## Starting the bundle in app
+
+	return array(
+		'template' => array('auto' => true)
+	);
+
 
 ## Exmaple used in a link
 
@@ -20,16 +26,29 @@ Based on the template class by Philip Sturgeon
 		);
 
 		return Template::make('layouts.body', $data)
+			// Allows you to overide the main data with partial specifics
 			->partial('footer', 'partials.footer', array('hello' => 'footer hello!'));
 	});
 
+
+## To override the config file
+	
+	Template::location('theme_locations'): 	// Override the locations the themes are stored in
+	Template::theme('theme_folder');		// Override the default theme folder
+	Template::layout('layout_file');		// Override the default layout file
 
 
 ### Theme folder structure
 
 	> Public
 		> themes
-			> assets
-			> views
-				> layouts
-				> partials
+			> default
+				> assets
+				> views
+					> layouts
+					> partials
+			> other
+				> assets
+				> views
+					> layouts
+					> partials				

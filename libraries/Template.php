@@ -6,6 +6,9 @@
 * Based on the template class by Philip Sturgeon
 * license : http://philsturgeon.co.uk/code/dbad-license
 */
+
+use Laravel\Config;
+
 class Template 
 {
 
@@ -35,21 +38,21 @@ class Template
     *
     * @var string
     */
-    public $theme_location;
+    protected static $location;
 
     /**
     * Holds the theme.
     *
     * @var string
     */
-    public $theme = 'main';
+    protected static $theme;
 
     /**
     * Holds the layout.
     *
     * @var string
     */
-    public $layout;
+    protected static $layout;
 
     /**
     * The cache content of loaded view files.
@@ -89,11 +92,10 @@ class Template
 
     public function __construct($view, $data = array())
     {
+        $this->init();
+
         $this->view = $view;
         $this->data = $data;
-
-        $this->theme_locations = path('public') . 'themes/';
-        $this->layout = 'layout';
 
         $this->path = $this->path($view);
 
@@ -113,6 +115,23 @@ class Template
         }
     }
 
+    /**
+    * Setup vars based on values given or config file.
+    *
+    * @return null
+    */
+    private function init()
+    {
+        if(empty(static::$location))
+            static::$location = Config::get('template::template.location');
+
+        if(empty(static::$theme))
+            static::$theme = Config::get('template::template.theme');
+            
+        if(empty(static::$layout))
+            static::$layout = Config::get('template::template.layout');
+    }
+
 
     /**
     * Determine if the given view exists.
@@ -128,7 +147,7 @@ class Template
             $view = static::$names[$name];
         }
 
-        $view = $this->theme_locations.'/'.$this->theme.'/views/'.str_replace('.', '/', $view).'.html';
+        $view = static::$location.'/'.static::$theme.'/views/'.str_replace('.', '/', $view).'.html';
         // We delegate the determination of view paths to the view loader event
         // so that the developer is free to override and manage the loading
         // of views in any way they see fit for their application.
@@ -166,6 +185,40 @@ class Template
 
 
     /**
+    * Set the location folder var.
+    *
+    * @return null
+    */
+    public static function location($location)
+    {
+        static::$location = $location;
+    }
+
+
+
+    /**
+    * Set the theme folder var.
+    *
+    * @return null
+    */
+    public static function theme($theme)
+    {
+        static::$theme = $theme;
+    }  
+
+
+    /**
+    * Set the layout file var.
+    *
+    * @return null
+    */
+    public static function layout($layout)
+    {
+        static::$layout = $layout;
+    }
+
+
+    /**
     * Get the evaluated string content of the view.
     *
     * @return string
@@ -187,8 +240,8 @@ class Template
     {
         $__data = $this->data();
 
-        $layout  = $this->path('layouts.layout');
-
+        $layout  = $this->path('layouts.'.static::$layout);
+        
         $this->parser = new Parser();
 
         // add the partials to the data array
