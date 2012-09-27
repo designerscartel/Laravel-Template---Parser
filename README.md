@@ -4,7 +4,8 @@ Laravel-Template---Parser
 Laravel Template System and Lex Parser bundle
 Based on the template class by Phil Sturgeon
 
-Phil Sturgeons Template library : https://github.com/philsturgeon/codeigniter-template 
+Phil Sturgeons Template library : https://github.com/philsturgeon/codeigniter-template
+
 Lex Parser can be found here : https://github.com/fuelphp/lex
 
 ## Starting the bundle in app
